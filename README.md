@@ -31,13 +31,14 @@ docker compose up -d
 docker compose ps                       # all NFs + mysql + ims + ext-dn should be "healthy"
 
 # 2. On the Core PC — start the gNB
-sudo ./nr-softmodem -O <path-to-gnb-conf> --sa -E --continuous-tx
+sudo ./nr-softmodem   -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf   --gNBs.[0].min_rxtxtime 8 -E
 
 # 3. On UE1's PC (eMBB) — start the UE with the eMBB slice config
-sudo ./nr-uesoftmodem -O ue_embb.conf --sa -r 106 --numerology 1 -E --continuous-tx --uicc0.imsi 001010000000001
+sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<Path-of-the-ue_embb.conf>/ue_embb.conf"
 
 # 4. On UE2's PC (URLLC) — start the UE with the URLLC slice config
-sudo ./nr-uesoftmodem -O ue_urllc.conf --sa -r 106 --numerology 1 -E --continuous-tx --uicc0.imsi 001010000000002
+ sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<Path-of-the-ue_urllc.conf>/ue_urllc.conf"
+
 
 # 5. Confirm both UEs attached and got a tunnel IP
 ip a | grep oaitun     # run on each UE PC — should show 10.0.2.17 (UE1) / 10.0.0.11 (UE2)
