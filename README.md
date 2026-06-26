@@ -7,7 +7,6 @@ A 3-PC, 3-USRP OpenAirInterface (OAI) 5G testbed running a single Core + gNB ins
 ## Contents
 
 - [Result](#result)
-- [Quick Start](#quick-start)
 - [Architecture](#architecture)
 - [Repo Structure](#repo-structure)
 - [Network Slice Configuration](#network-slice-configuration)
