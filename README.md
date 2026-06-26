@@ -6,7 +6,7 @@ A 3-PC, 3-USRP OpenAirInterface (OAI) 5G testbed running a single Core + gNB ins
 
 ## Contents
 
-- [Result](#result)
+- [Description](#descroption)
 - [Architecture](#architecture)
 - [Repo Structure](#repo-structure)
 - [Network Slice Configuration](#network-slice-configuration)
@@ -18,7 +18,7 @@ A 3-PC, 3-USRP OpenAirInterface (OAI) 5G testbed running a single Core + gNB ins
 
 ---
 
-## Result
+## Description
 
 ✅ Multi-UE, multi-slice operation confirmed working. Both UEs attached, established PDU sessions on their respective slices, and exchanged UDP traffic with the core's external Data Network container at 2 Mbit/s with **0% packet loss** over a 30-second test.
 
