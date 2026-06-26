@@ -197,6 +197,7 @@ cd Dual_UE_Operation_by_using_OAI
 ```
 
 ---
+put the congiuration files in the corresponding folders and restart the docker containers using below comments.
 
 ### 2. Provision subscribers in the core DB (PC1)
 
@@ -216,23 +217,24 @@ docker compose ps      # confirm all NFs + mysql + ims + ext-dn are healthy
 > ⚠️ Wait until every container shows `healthy` — not just `running`. `oai-amf` and `oai-smf` depend on `oai-nrf` and `mysql` being fully ready first.
 
 ---
-
+put the gnb configuration file (gnb.sa.band78.fr1.106PRB.usrpb210.conf) in the corresponding folder (/openairinterface5g/targets/PROJECTS/GENERIC-NR-5GC/CONF) and then run the following command
 ### 4. Start the gNB (PC1)
 
 ```bash
 cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo ./nr-softmodem -O <path-to-gnb-conf> --sa -E --continuous-tx
+sudo ./nr-softmodem   -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf   --gNBs.[0].min_rxtxtime 8 -E
+
 ```
 
 Confirm `N2 setup` success in the gNB logs before starting either UE.
 
 ---
-
+put the ue configuration file (ue_embb.conf) in the corresponding folder (/openairinterface5g/cmake_targets/ran_build/build) in the PC2 and then run the following command
 ### 5. Start UE1 — eMBB (PC2)
 
 ```bash
 cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<path-to-ue_embb.conf>/ue_embb.conf"
+sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "ue_embb.conf"
 ```
 
 Watch the logs for `RRC_CONNECTED` and a successful PDU session. On success the tunnel interface appears:
@@ -242,12 +244,12 @@ ip a | grep oaitun     # should show 10.0.2.17
 ```
 
 ---
-
+put the ue configuration file (ue_urllc.conf) in the corresponding folder (/openairinterface5g/cmake_targets/ran_build/build) in the PC3 and then run the following command
 ### 6. Start UE2 — URLLC (PC3)
 
 ```bash
 cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<path-to-ue_urllc.conf>/ue_urllc.conf"
+sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "ue_urllc.conf"
 ```
 
 ```bash
@@ -274,7 +276,7 @@ iperf3 servers run inside `oai-ext-dn` on PC1. Each UE PC runs its own iperf3 cl
 **PC1 — start one server per slice/port:**
 ```bash
 # Always kill stale iperf3 processes first
-docker exec oai-ext-dn pkill -9 iperf3 2>/dev/null
+$ docker exec oai-ext-dn pkill -9 iperf3 2>/dev/null
 sleep 1
 docker exec -d oai-ext-dn iperf3 -s -p 5201
 docker exec -d oai-ext-dn iperf3 -s -p 5202
@@ -282,12 +284,12 @@ docker exec -d oai-ext-dn iperf3 -s -p 5202
 
 **PC2 — UE1 (eMBB) client:**
 ```bash
-iperf3 -c 192.168.70.135 -B 10.0.2.17 -u -b 2M -R -t 30 -p 5202
+$ iperf3 -c 192.168.70.135 -B 10.0.2.17 -u -b 2M -R -t 30 -p 5202
 ```
 
 **PC3 — UE2 (URLLC) client:**
 ```bash
-iperf3 -c 192.168.70.135 -B 10.0.0.11 -u -b 2M -R -t 30 -p 5201
+$ iperf3 -c 192.168.70.135 -B 10.0.0.11 -u -b 2M -R -t 30 -p 5201
 ```
 
 > **Important:** The `-B` flag binds the socket to a local IP address on the machine running the command. Always run each UE's iperf3 client **on its own PC** — the PC that actually owns that tunnel IP.
