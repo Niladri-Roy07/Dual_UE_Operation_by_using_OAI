@@ -55,9 +55,9 @@ If anything above fails, jump to [Step-by-Step Setup](#step-by-step-setup) or th
 
 | Role | Machine | Notes |
 |---|---|---|
-| OAI 5G Core + gNB | `iiitb-Legion-5-Pro-16ARH7H` | Runs all core NF containers + gNB. Hosts `oai-ext-dn` (Data Network) at `192.168.70.135`. |
-| UE1 (eMBB) | `ubuntu-ThinkStation-P8` | Own USRP. Tunnel IP `10.0.2.17` after PDU session establishment. |
-| UE2 (URLLC) | `yogs-Legion-5-Pro-16ARH7H` | Own USRP. Tunnel IP `10.0.0.11` after PDU session establishment. |
+| OAI 5G Core + gNB | PC1 | Runs all core NF containers + gNB. Hosts `oai-ext-dn` (Data Network) at `192.168.70.135`. |
+| UE1 (eMBB) | PC2 | Own USRP. Tunnel IP `10.0.2.17` after PDU session establishment. |
+| UE2 (URLLC) | PC3 | Own USRP. Tunnel IP `10.0.0.11` after PDU session establishment. |
 
 All three machines communicate over their USRPs (RF sync confirmed) before any slice-level testing.
 
@@ -194,7 +194,7 @@ Confirm in the gNB logs that it registers with the AMF (`N2 setup` success) befo
 ### 5. Start UE1 — eMBB (UE1's PC)
 
 ```bash
-sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --ssb 516 -E -O /<path-to-repo>/repo/configs/ue_embb.conf
+sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<Path_of_the_ue_embb.conf>/ue_embb.conf"
 ```
 
 Watch the logs for `RRC_CONNECTED` and a successful PDU session establishment. On success, a `oaitun_ue1`-style interface appears:
@@ -206,7 +206,7 @@ ip a | grep oaitun     # should show 10.0.2.17
 ### 6. Start UE2 — URLLC (UE2's PC)
 
 ```bash
-sudo ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --ssb 516 -E -O /<path-to-repo>/repo/configs/ue_urllc.conf
+sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<Path_of_the_ue_urllc.conf>/ue_urllc.conf"
 ```
 
 Same check:
