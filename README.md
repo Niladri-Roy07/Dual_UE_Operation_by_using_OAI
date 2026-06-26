@@ -440,7 +440,7 @@ sudo ip route add default via 192.168.70.129 dev oai-cn5g
 **Resulting correct routing table on PC1(core+gnb):**
 ```
 ip route show
-Results:
+# Results:
 default via 192.168.70.129 dev oai-cn5g          ← correct gateway
 default via 172.16.128.1 dev wlp2s0 proto dhcp src 172.16.139.175 metric 600
 172.16.128.0/20 dev wlp2s0 proto kernel scope link src 172.16.139.175 metric 600
@@ -458,7 +458,7 @@ sudo ip route add default via 10.0.2.0 dev oaitun_ue1
 IN PC2(UE1) and PC3(UE2) both:
 ```
 ip route show
-Results:
+# Results:
 default via 10.0.0.0 dev oaitun_ue1   #IN PC PC3
 default via 10.0.2.0 dev oaitun_ue1   #IN PC PC2
 ```
