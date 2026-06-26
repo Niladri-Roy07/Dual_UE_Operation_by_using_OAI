@@ -438,15 +438,30 @@ sudo ip route add default via 192.168.70.129 dev oai-cn5g
 ```
 
 **Resulting correct routing table on PC1(core+gnb):**
-ip route show
 ```
+ip route show
+Results:
 default via 192.168.70.129 dev oai-cn5g          ← correct gateway
 default via 172.16.128.1 dev wlp2s0 proto dhcp src 172.16.139.175 metric 600
 172.16.128.0/20 dev wlp2s0 proto kernel scope link src 172.16.139.175 metric 600
 172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown
 192.168.70.128/26 dev oai-cn5g proto kernel scope link src 192.168.70.129
 ```
-
+IN PC3 (UE2):
+```
+sudo ip route add default via 10.0.0.0 dev oaitun_ue1
+```
+IN PC2 (UE1):
+```
+sudo ip route add default via 10.0.2.0 dev oaitun_ue1
+```
+IN PC2(UE1) and PC3(UE2) both:
+```
+ip route show
+Results:
+default via 10.0.0.0 dev oaitun_ue1   #IN PC PC3
+default via 10.0.2.0 dev oaitun_ue1   #IN PC PC2
+```
 > **Note:** Even after fixing the routing, pings to `10.0.0.x` from the host still return unreachable — and that is **expected**. Those IPs live on the UE's `oaitun_ue1` tunnel interface, not on the host machine. The correct end-to-end reachability test is the iperf3 test bound to the tunnel IP and run from within the UE's own PC, which is exactly what the [Testing Throughput](#testing-throughput-per-slice) section does.
 
 ---
