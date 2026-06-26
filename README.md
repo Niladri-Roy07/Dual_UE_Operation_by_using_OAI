@@ -25,42 +25,6 @@ A 3-PC, 3-USRP OpenAirInterface (OAI) 5G testbed running a single Core + gNB ins
 
 ---
 
-## Quick Start
-
-> Assumes OAI CN5G, OAI RAN (gNB + nrUE), and UHD drivers are already built on all three PCs, and all three USRPs are connected and RF-synced. For a from-scratch setup, see [Step-by-Step Setup](#step-by-step-setup) below.
-
-```bash
-# 1. On the Core PC — bring up the 5G core
-git clone https://github.com/Niladri-Roy07/Dual_UE_Operation_by_using_OAI.git
-cd Dual_UE_Operation_by_using_OAI
-docker compose down                     # stop the core network
-docker compose up -d
-docker compose ps                       # all NFs + mysql + ims + ext-dn should be "healthy"
-
-# 2. On the Core PC — start the gNB
-sudo ./nr-softmodem -O <path-to-gnb-conf> --sa -E --continuous-tx
-
-# 3. On UE1's PC (eMBB) — start the UE with the eMBB slice config
-sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<path-to-ue_embb.conf>/ue_embb.conf"
-
-# 4. On UE2's PC (URLLC) — start the UE with the URLLC slice config
-sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<path-to-ue_urllc.conf>/ue_urllc.conf"
-# 5. Confirm both UEs attached and got a tunnel IP
-ip a | grep oaitun     # run on each UE PC — should show 10.0.2.17 (UE1) / 10.0.0.11 (UE2)
-ping 192.168.70.129    # IN UE1 and UE2 as well
-
-# 6. On the Core PC — start iperf3 servers, one per slice
-docker exec oai-ext-dn pkill -9 iperf3 2>/dev/null   # always kill stale servers first
-sleep 1
-docker exec -d oai-ext-dn iperf3 -s -p 5201
-docker exec -d oai-ext-dn iperf3 -s -p 5202
-
-# 7. On each UE PC — run the iperf3 client (see Testing section for full commands)
-```
-
-If anything above fails, jump to [Step-by-Step Setup](#step-by-step-setup) or the [Troubleshooting Log](#troubleshooting-log).
-
----
 
 ## Architecture
 
