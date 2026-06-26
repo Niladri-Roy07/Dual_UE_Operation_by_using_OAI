@@ -198,7 +198,8 @@ The two IMSIs in the [Network Slice Configuration](#network-slice-configuration)
 
 ```bash
 docker compose up -d
-docker compose ps        # confirm all NFs + mysql + ims + ext-dn are healthy
+docker compose ps      # confirm all NFs + mysql + ims + ext-dn are healthy
+docker compose down    # stop the core network
 ```
 
 > ⚠️ Wait until every container shows `healthy` — not just `running`. `oai-amf` and `oai-smf` depend on `oai-nrf` and `mysql` being fully ready first.
@@ -225,7 +226,7 @@ cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo ./nr-uesoftmodem \
   -r 106 --numerology 1 --band 78 \
   -C 3619200000 --ssb 516 -E \
-  -O /<path-to-repo>/repo/configs/ue_embb.conf
+  -O /<path-to-ue_embb.conf>/ue_embb.conf
 ```
 
 Watch the logs for `RRC_CONNECTED` and a successful PDU session. On success the tunnel interface appears:
@@ -243,8 +244,10 @@ cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo ./nr-uesoftmodem \
   -r 106 --numerology 1 --band 78 \
   -C 3619200000 --ssb 516 -E \
-  -O /<path-to-repo>/repo/configs/ue_urllc.conf
+  -O /<path-to-ue_urllc.conf>/ue_urllc.conf
 ```
+```bash
+ping 192.168.70.129 # IN UE1 and UE2 as well
 
 ```bash
 ip a | grep oaitun     # should show 10.0.0.11
