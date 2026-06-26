@@ -397,7 +397,6 @@ Additionally, the very first iperf3 command had a bracketed-paste terminal artif
 ```
 iperf3: command not found
 ```
-because the shell received `^[[200~iperf3` as the command name instead of `iperf3`.
 
 **Fix:**
 Run each iperf3 client **on the PC that actually owns that tunnel IP**:
