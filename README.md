@@ -348,9 +348,6 @@ A missing leading `/` in the stderr redirect. `2>dev/null` tells the shell to re
 
 **Fix:**
 ```bash
-# Wrong — tries to write to a file called "dev/null" in the current directory
-docker exec oai-ext-dn pkill -9 iperf3 2>dev/null
-
 # Correct — redirects stderr to the null device (discards it)
 docker exec oai-ext-dn pkill -9 iperf3 2>/dev/null
 ```
