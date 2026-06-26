@@ -47,6 +47,7 @@ sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "361920
 sudo "./nr-uesoftmodem" "-r" "106" "--numerology" "1" "--band" "78" "-C" "3619200000" "--ssb" "516" "-E" "-O" "/<path-to-ue_urllc.conf>/ue_urllc.conf"
 # 5. Confirm both UEs attached and got a tunnel IP
 ip a | grep oaitun     # run on each UE PC — should show 10.0.2.17 (UE1) / 10.0.0.11 (UE2)
+ping 192.168.70.129    # IN UE1 and UE2 as well
 
 # 6. On the Core PC — start iperf3 servers, one per slice
 docker exec oai-ext-dn pkill -9 iperf3 2>/dev/null   # always kill stale servers first
@@ -427,7 +428,7 @@ default via 172.16.128.1 dev wlp2s0 ...
 
 The UPF (`192.168.70.134`) is a container-internal endpoint, not a gateway router for the Docker bridge subnet. Traffic destined for `10.0.0.x` routed through it had no valid return path from the host side. Every ICMP packet came back as `Destination Host Unreachable` from the Docker bridge gateway (`192.168.70.129`).
 
-**Fix — corrected the default route on PC2:**
+**Fix — corrected the default route on PC1(core+gnb):**
 ```bash
 # Step 1: Remove the wrong default route pointing to the UPF
 sudo ip route del default via 192.168.70.134 dev oai-cn5g
@@ -436,7 +437,7 @@ sudo ip route del default via 192.168.70.134 dev oai-cn5g
 sudo ip route add default via 192.168.70.129 dev oai-cn5g
 ```
 
-**Resulting correct routing table on PC2:**
+**Resulting correct routing table on PC1(core+gnb):**
 ```
 default via 192.168.70.129 dev oai-cn5g          ← correct gateway
 default via 172.16.128.1 dev wlp2s0 proto dhcp src 172.16.139.175 metric 600
