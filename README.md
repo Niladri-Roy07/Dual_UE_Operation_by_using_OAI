@@ -411,7 +411,13 @@ default via 172.16.176.1 dev wlp2s0 proto dhcp src 172.16.177.7 metric 600
 10.0.2.0/24 dev oaitun_ue1 proto kernel scope link src 10.0.2.2 
 172.16.176.0/22 dev wlp2s0 proto kernel scope link src 172.16.177.7 metric 600 
 192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 linkdown    
-default via 10.0.2.0 dev oaitun_ue1   #IN PC PC2
+
+default via 10.0.0.0 dev oaitun_ue1                                          #IN PC PC2
+default via 172.16.124.1 dev wlp14s0 proto dhcp metric 600 
+10.0.0.0/24 dev oaitun_ue1 proto kernel scope link src 10.0.0.2 
+169.254.0.0/16 dev wlp14s0 scope link metric 1000 
+172.16.124.0/23 dev wlp14s0 proto kernel scope link src 172.16.124.49 metric 600 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 linkdown 
 ```
 > **Note:** Even after fixing the routing, pings to `10.0.0.x` from the host still return unreachable — and that is **expected**. Those IPs live on the UE's `oaitun_ue1` tunnel interface, not on the host machine. The correct end-to-end reachability test is the iperf3 test bound to the tunnel IP and run from within the UE's own PC, which is exactly what the [Testing Throughput](#testing-throughput-per-slice) section does.
 
