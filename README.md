@@ -402,6 +402,7 @@ From 192.168.70.129 icmp_seq=2 Destination Host Unreachable
 PC2's default route was pointing to `192.168.70.134` — the UPF container's IP — via the `oai-cn5g` Docker bridge interface. This was the wrong gateway. The routing table at the time of failure:
 
 ```
+$ ip route show
 default via 192.168.70.134 dev oai-cn5g    ← wrong: UPF IP is not a host gateway
 default via 172.16.128.1 dev wlp2s0 ...
 192.168.70.128/26 dev oai-cn5g proto kernel scope link src 192.168.70.129
