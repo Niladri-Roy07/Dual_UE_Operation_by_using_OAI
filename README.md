@@ -98,8 +98,17 @@ Dual_UE_Operation_by_using_OAI/
 ├── README.md
 └── repo/
     └── configs/
-        ├── ue_embb.conf      # UE1 config — eMBB slice (SST=1, DNN=oai)
-        └── ue_urllc.conf     # UE2 config — URLLC slice (SST=2, DNN=lowlat)
+        ├── ue.conf  
+          └── ue_embb.conf      # UE1 config — eMBB slice (SST=1, DNN=oai)
+          └── ue_urllc.conf     # UE2 config — URLLC slice (SST=2, DNN=lowlat)
+        ├── oai-cn5g
+         └── conf
+           └── config.yml
+           └── sip.conf
+           └──users.conf
+        ├── docker-compose.yml
+        ├── mysql-healthcheck.sh
+        ├── oai_db.sql  
 ```
 
 > The `docker-compose.yaml` for the 5G core and the gNB `.conf` file are sourced from the official [oai-cn5g-fed](https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-fed) and [openairinterface5g](https://gitlab.eurecom.fr/oai/openairinterface5g) repositories respectively. This repo stores only the UE-side slice configs under `repo/configs/`.
